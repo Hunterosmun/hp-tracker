@@ -5,7 +5,7 @@ function App () {
   const [counters, setCounters] = useState([{ id: crypto.randomUUID() }])
   return (
     <Wrapper>
-      <h1>Sentinals HP Tracker</h1>
+      <h1>HP Tracker</h1>
       <MainBox>
         {counters.map(e => (
           <div key={e.id}>
@@ -64,6 +64,16 @@ export default App
 
 const Wrapper = styled.div`
   text-align: center;
+  button {
+    border-radius: 4px;
+    border: 1px solid #777;
+    padding: 4px 8px;
+    margin: 0 4px;
+
+    &:hover {
+      background-color: #aaa;
+    }
+  }
 `
 
 const MainBox = styled.div`
