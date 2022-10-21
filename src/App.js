@@ -1,15 +1,19 @@
-import { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 function App () {
-  const [counters, setCounters] = useState([{ id: crypto.randomUUID() }])
+  const [counters, setCounters] = React.useState([
+    { name: 'Example', id: crypto.randomUUID() }
+  ])
+  const [name, setName] = React.useState('')
+
   return (
     <Wrapper>
       <h1>HP Tracker</h1>
       <MainBox>
         {counters.map(e => (
           <div key={e.id}>
-            <Counter />
+            <Counter name={e.name} />
             <button
               onClick={() => {
                 setCounters(counters => counters.filter(obj => obj.id !== e.id))
@@ -20,9 +24,19 @@ function App () {
           </div>
         ))}
         <br />
+        <input
+          value={name}
+          onChange={e => {
+            setName(e.target.value)
+          }}
+        />
         <button
           onClick={() => {
-            setCounters(counters => [...counters, { id: crypto.randomUUID() }])
+            setCounters(counters => [
+              ...counters,
+              { name, id: crypto.randomUUID() }
+            ])
+            setName('')
           }}
         >
           Create New
@@ -32,8 +46,8 @@ function App () {
   )
 }
 
-function Counter () {
-  const [counter, setCounter] = useState(0)
+function Counter ({ name }) {
+  const [counter, setCounter] = React.useState(0)
   //increase counter
   const increase = () => {
     setCounter(count => count + 1)
@@ -52,6 +66,7 @@ function Counter () {
   return (
     <>
       <br />
+      {name}
       <button onClick={increase}>+</button>
       <NameHolder>{counter}</NameHolder>
       <button onClick={decrease}> -</button>
