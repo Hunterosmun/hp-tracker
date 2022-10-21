@@ -7,12 +7,18 @@ function App () {
   ])
   const [name, setName] = React.useState('')
 
+  const createNew = () => {
+    if (!name) return
+    setCounters(counters => [...counters, { name, id: crypto.randomUUID() }])
+    setName('')
+  }
+
   return (
     <Wrapper>
-      <h1>HP Tracker</h1>
+      <h1>Game Tracker</h1>
       <MainBox>
         {counters.map(e => (
-          <div key={e.id}>
+          <CounterWrap key={e.id}>
             <Counter name={e.name} />
             <button
               onClick={() => {
@@ -21,26 +27,22 @@ function App () {
             >
               Delete
             </button>
-          </div>
+          </CounterWrap>
         ))}
         <br />
-        <input
-          value={name}
-          onChange={e => {
-            setName(e.target.value)
-          }}
-        />
-        <button
-          onClick={() => {
-            setCounters(counters => [
-              ...counters,
-              { name, id: crypto.randomUUID() }
-            ])
-            setName('')
-          }}
-        >
-          Create New
-        </button>
+        <div>
+          <input
+            value={name}
+            onKeyDown={e => {
+              if (e.key === 'Enter') createNew()
+            }}
+            onChange={e => {
+              setName(e.target.value)
+            }}
+            placeholder='New Name'
+          />
+          <button onClick={createNew}>Create New</button>
+        </div>
       </MainBox>
     </Wrapper>
   )
@@ -66,9 +68,9 @@ function Counter ({ name }) {
   return (
     <>
       <br />
-      {name}
+      <NameWrap>{name}</NameWrap>
       <button onClick={increase}>+</button>
-      <NameHolder>{counter}</NameHolder>
+      <CountHolder>{counter}</CountHolder>
       <button onClick={decrease}> -</button>
       <button onClick={reset}>Reset</button>
     </>
@@ -79,6 +81,7 @@ export default App
 
 const Wrapper = styled.div`
   text-align: center;
+
   button {
     border-radius: 4px;
     border: 1px solid #777;
@@ -96,9 +99,27 @@ const MainBox = styled.div`
   min-width: 97vw;
   min-height: 599px;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
-const NameHolder = styled.span`
+const CountHolder = styled.span`
   padding-left: 10px;
   padding-right: 10px;
+`
+
+const NameWrap = styled.div`
+  width: 150px;
+  display: block;
+  position: absolute;
+  left: -150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
+const CounterWrap = styled.div`
+  position: relative;
+  width: 225px;
 `
