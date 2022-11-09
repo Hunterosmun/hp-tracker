@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const titleFields = { id: 'titles', fields: ['Name', 'Health', '', ''] }
+
 function App () {
   const [counters, setCounters] = React.useState([
+    titleFields,
     { name: 'Example', id: crypto.randomUUID() }
   ])
   const [name, setName] = React.useState('')
@@ -17,18 +20,31 @@ function App () {
     <Wrapper>
       <h1>Game Tracker</h1>
       <MainBox>
-        {counters.map(e => (
-          <CounterWrap key={e.id}>
-            <Counter name={e.name} />
-            <button
-              onClick={() => {
-                setCounters(counters => counters.filter(obj => obj.id !== e.id))
-              }}
-            >
-              Delete
-            </button>
-          </CounterWrap>
-        ))}
+        {counters.map(e => {
+          if (e.id === 'titles') {
+            return (
+              <h2>
+                {e.fields.map((e, i) => (
+                  <span key={`title-${i}`}>{e}</span>
+                ))}
+              </h2>
+            )
+          }
+          return (
+            <CounterWrap key={e.id}>
+              <Counter name={e.name} />
+              <button
+                onClick={() => {
+                  setCounters(counters =>
+                    counters.filter(obj => obj.id !== e.id)
+                  )
+                }}
+              >
+                Delete
+              </button>
+            </CounterWrap>
+          )
+        })}
         <br />
         <div>
           <input
@@ -95,13 +111,24 @@ const Wrapper = styled.div`
 `
 
 const MainBox = styled.div`
-  border: solid 3px black;
+  /* border: solid 3px black; */
   min-width: 97vw;
   min-height: 599px;
   padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  h2 {
+    border-bottom: 2px solid #ddd;
+    font-size: 16px;
+    font-weight: 1;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+    span {
+      padding-right: 90px;
+    }
+  }
 `
 
 const CountHolder = styled.span`
@@ -121,5 +148,5 @@ const NameWrap = styled.div`
 
 const CounterWrap = styled.div`
   position: relative;
-  width: 225px;
+  width: 235px;
 `
